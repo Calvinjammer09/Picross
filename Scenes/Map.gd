@@ -4,6 +4,7 @@ extends TileMap
 @onready var first_move_timer = get_node("InitialMoveTimer")
 @onready var fast_move_timer = get_node("MoveTimer")
 @onready var test_sprite = get_node("Pickaxe")
+@onready var lava_blob = get_node('LavaMap')
 
 var tile_size := 16
 
@@ -13,7 +14,7 @@ var last_input : Array = [0, 0, 0, 0]
 var last_movement_x := 0
 var last_movement_y := 0
 
-var current_image_size := Vector2 (11, 11)
+var current_image_size := Vector2 (20, 20)
 
 func _ready():
 	pass
@@ -23,9 +24,16 @@ func get_map():
 
 	# map is initially an empty array
 	var map = []
+	
+	texture.get_data()
+	
+	get_data()
 
 	# get image data
 	var image = test_sprite.texture.get_data()
+	
+	var rows = []
+	var columns = []
 
 	# lock the image so get_pixel() can be called on it
 	image.lock()
@@ -80,6 +88,7 @@ func take_input():
 
 	else:
 		moving = false
+		can_move = true
 
 	if can_move and dir:
 		test_sprite.position += direction.normalized() * tile_size

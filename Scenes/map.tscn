@@ -1,7 +1,8 @@
-[gd_scene load_steps=3 format=3 uid="uid://cbh8io1kt2vpy"]
+[gd_scene load_steps=4 format=3 uid="uid://cbh8io1kt2vpy"]
 
 [ext_resource type="Script" path="res://Scenes/Map.gd" id="1_3e6fa"]
 [ext_resource type="Texture2D" uid="uid://biheixl0k7luw" path="res://Maps/Pickaxe.png" id="2_pjndv"]
+[ext_resource type="Texture2D" uid="uid://u00qq32lbtdr" path="res://Maps/LavaMap.png" id="3_ggotv"]
 
 [node name="SpriteMap" type="TileMap"]
 format = 2
@@ -16,8 +17,13 @@ process_callback = 0
 wait_time = 0.05
 
 [node name="Pickaxe" type="Sprite2D" parent="."]
-position = Vector2(565, 327)
+position = Vector2(-2, -4)
 texture = ExtResource("2_pjndv")
+
+[node name="LavaMap" type="Sprite2D" parent="."]
+position = Vector2(425, 269)
+scale = Vector2(20, 20)
+texture = ExtResource("3_ggotv")
 
 [connection signal="timeout" from="InitialMoveTimer" to="." method="_on_initial_move_timer_timeout"]
 [connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]
