@@ -4,6 +4,43 @@ class Puzzle:
 	var Name: String
 	var Bitmap: Array[String]
 	
+	func puzzle_count(s:String) -> Array[int]:
+		'''Given a string representing a row/col, return the pattern'''
+		var result: Array[int] = []
+
+		for sp in s.split(" "):
+			if 0 != sp.length():
+				result.append(sp.length())
+				
+		if result.size() == 0:
+			result = [0]
+		
+		return result
+	
+	func puzzle_rows() -> Array:
+		'''Given a puzzle, returns an array of arrays of ints
+		
+		These are the pattern counts for each row
+		'''
+		var result = []
+		for s in Bitmap:
+			result.append(puzzle_count(s))
+		return result
+		
+	func puzzle_cols() -> Array:
+		'''Does the same thing as puzzle_rows, but for columns
+		
+		This is a bit complicated as we have to transpose the puzzle
+		'''
+		var result = []
+		
+		for i in range(Bitmap[0].length()):
+			var s = ""
+			for row in Bitmap:
+				s += row[i]
+			result.append( puzzle_count(s) )
+		return result
+	
 
 @onready var first_move_timer = get_node("InitialMoveTimer")
 @onready var fast_move_timer = get_node("MoveTimer")
@@ -24,41 +61,6 @@ func _ready():
 	puzzle_demo()
 	generate_map(lava_blob.texture.get_image())
 
-func puzzle_count(s:String) -> Array[int]:
-	'''Given a string representing a row/col, return the pattern'''
-	var result: Array[int] = []
-
-	for sp in s.split(" "):
-		if 0 != sp.length():
-			result.append(sp.length())
-	
-	return result
-
-func puzzle_rows(p:Puzzle) -> Array:
-	'''Given a puzzle, returns an array of arrays of ints
-	
-	These are the pattern counts for each row
-	'''
-	var result = []
-	for s in p.Bitmap:
-		result.append(puzzle_count(s))
-	return result
-	
-	
-func puzzle_cols(p:Puzzle) -> Array:
-	'''Does the same thing as puzzle_rows, but for columns
-	
-	This is a bit complicated as we have to transpose the puzzle
-	'''
-	var result = []
-	
-	for i in range(p.Bitmap[0].length()):
-		var s = ""
-		for row in p.Bitmap:
-			s += row[i]
-		result.append( puzzle_count(s) )
-	return result
-
 func print_bitmap(p):
 	for s in p.Bitmap:
 		print(s)
@@ -72,25 +74,23 @@ func puzzle_demo():
 		"X X"]
 	
 	print_bitmap(p)
-	print("Rows:", puzzle_rows(p))
-	print("Cols:", puzzle_cols(p))
+	print("Rows:", p.puzzle_rows())
+	print("Cols:", p.puzzle_cols())
 
 
 func generate_map(image):
-	var bitmap : Array[String]
+	var new_puzzle = Puzzle.new()
 
 	for y in image.get_width():
 		var line = ''
 		for x in image.get_height():
 			line += 'X' if image.get_pixel(x, y)[3] != 0 else ' '
-		bitmap.append(line)
-
-	var new_puzzle = Puzzle.new()
-	new_puzzle.Name = 'lava'
-	new_puzzle.Bitmap = bitmap
+		new_puzzle.Bitmap.append(line)
+		
+	print_bitmap(new_puzzle)
+	print("Rows:", new_puzzle.puzzle_rows())
+	print("Cols:", new_puzzle.puzzle_cols())
 	
-	for s in new_puzzle.Bitmap:
-		print(s)
 			
 func check_last_direction(input):
 	if input == last_input:
