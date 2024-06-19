@@ -11,17 +11,19 @@ script = ExtResource("1_3e6fa")
 [node name="InitialMoveTimer" type="Timer" parent="."]
 process_callback = 0
 wait_time = 0.75
+one_shot = true
 
 [node name="MoveTimer" type="Timer" parent="."]
 process_callback = 0
 wait_time = 0.05
+one_shot = true
 
 [node name="Pickaxe" type="Sprite2D" parent="."]
-position = Vector2(-2, -4)
+position = Vector2(-433, 136)
 texture = ExtResource("2_pjndv")
 
 [node name="LavaMap" type="Sprite2D" parent="."]
-position = Vector2(425, 269)
+position = Vector2(-431, 260)
 scale = Vector2(20, 20)
 texture = ExtResource("3_ggotv")
 

@@ -90,26 +90,6 @@ func generate_map(image):
 	print_bitmap(new_puzzle)
 	print("Rows:", new_puzzle.puzzle_rows())
 	print("Cols:", new_puzzle.puzzle_cols())
-	
-			
-func check_last_direction(input):
-	if input == last_input:
-		return false
-		
-	if not input:
-		last_input = input
-		return false
-		
-	var input_idx := 0
-	var different_directions := []
-	
-	for direction in input:
-		if direction != last_input[input_idx]:
-			different_directions.append(input_idx)
-			
-	last_input = input
-			
-	return different_directions
 
 func take_input():
 	var direction = Input.get_vector('left', 'right', 'up', 'down')
@@ -121,9 +101,7 @@ func take_input():
 	var _mark = Input.is_action_pressed('mark')
 
 	var input_list = [1 if direction[0] < 0 else 0, 1 if direction[0] > 0 else 0, 1 if direction[1] < 0 else 0, 1 if direction[1] > 0 else 1]
-	
-	var _input = check_last_direction(input_list)
-	
+
 	var dir = direction[0] != 0 or direction[1] != 0
 
 	if dir:
@@ -147,7 +125,9 @@ func _physics_process(_delta):
 	take_input()
 	
 func _on_initial_move_timer_timeout():
+	print('first timer check')
 	can_move = true
 
 func _on_move_timer_timeout():
+	print('second timer check')
 	can_move = true
