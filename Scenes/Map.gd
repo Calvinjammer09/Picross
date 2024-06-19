@@ -64,7 +64,7 @@ class Puzzle:
 				tile.set_texture(blank)
 				BoardState[x][y] = ' '
 				ChiselMode = 'blank'
-			elif tile.texture == blank and input != 'mark':
+			elif tile.texture != chisled and input != 'mark':
 				tile.set_texture(chisled)
 				BoardState[x][y] = 'X'
 				ChiselMode = 'chisel'
