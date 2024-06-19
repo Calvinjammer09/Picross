@@ -1,0 +1,40 @@
+[gd_scene load_steps=5 format=3 uid="uid://cbh8io1kt2vpy"]
+
+[ext_resource type="Script" path="res://Scenes/Map.gd" id="1_3e6fa"]
+[ext_resource type="Texture2D" uid="uid://biheixl0k7luw" path="res://Maps/Pickaxe.png" id="2_pjndv"]
+[ext_resource type="Texture2D" uid="uid://u00qq32lbtdr" path="res://Maps/LavaMap.png" id="3_ggotv"]
+[ext_resource type="Texture2D" uid="uid://cuefv1pagf7ro" path="res://Sprites/Cursor.png" id="4_3ww0d"]
+
+[node name="SpriteMap" type="TileMap"]
+format = 2
+script = ExtResource("1_3e6fa")
+
+[node name="InitialMoveTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.75
+one_shot = true
+
+[node name="MoveTimer" type="Timer" parent="."]
+process_callback = 0
+wait_time = 0.05
+one_shot = true
+
+[node name="Pickaxe" type="Sprite2D" parent="."]
+position = Vector2(-418, 232)
+scale = Vector2(10, 10)
+texture = ExtResource("2_pjndv")
+
+[node name="LavaMap" type="Sprite2D" parent="."]
+position = Vector2(-431, 260)
+scale = Vector2(20, 20)
+texture = ExtResource("3_ggotv")
+
+[node name="Cursor" type="Sprite2D" parent="."]
+z_index = 1
+position = Vector2(-1, -1)
+scale = Vector2(2, 2)
+texture = ExtResource("4_3ww0d")
+centered = false
+
+[connection signal="timeout" from="InitialMoveTimer" to="." method="_on_initial_move_timer_timeout"]
+[connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]

@@ -67,6 +67,8 @@ var blank = load("res://Sprites/BlankTile.png")
 var tile_scale := 2
 var tile_size := 16 * tile_scale
 
+var puzzle
+
 var can_move := true
 var moving := false
 var last_input : Array = [0, 0, 0, 0]
@@ -74,7 +76,7 @@ var last_movement_x := 0
 var last_movement_y := 0
 
 func _ready():
-	var puzzle = generate_map(lava_blob.texture.get_image(), Vector2(20, 20))
+	puzzle = generate_map(lava_blob.texture.get_image(), Vector2(20, 20))
 
 func generate_map(image, puzzle_size:Vector2):
 	var new_puzzle = Puzzle.new()
@@ -108,9 +110,10 @@ func generate_map(image, puzzle_size:Vector2):
 
 	return new_puzzle
 			
-func chisel(tile:Sprite2D, puzzle:Puzzle):
+func chisel(tile:Sprite2D):
 	if tile.texture == chisled:
 		tile.set_texture(blank)
+		
 	else:
 		tile.set_texture(chisled)
 		
@@ -118,12 +121,16 @@ func chisel(tile:Sprite2D, puzzle:Puzzle):
 func take_input():
 	var direction = Input.get_vector('left', 'right', 'up', 'down')
 	
-	var _chisel = Input.is_action_pressed('break')
-	var _mark = Input.is_action_pressed('mark')
+	var chisel = Input.is_action_just_pressed('break')
+	var _mark = Input.is_action_just_pressed('mark')
 	var got_escape = Input.is_action_pressed('quit')
 	
 	if got_escape:
 		get_tree().quit()
+		
+	if chisel:
+		var pos = (cursor.position + Vector2(1, 1)) / Vector2(tile_size, tile_size)
+		chisel(puzzle.Tiles[pos[1]][pos[0]])
 
 	var dir = direction[0] != 0 or direction[1] != 0
 
