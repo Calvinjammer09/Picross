@@ -178,7 +178,7 @@ func take_input():
 				last_tile_marked = pos
 				puzzle.chisel(puzzle.Tiles[pos[1]][pos[0]], pos[1], pos[0], 'mark')
 		else:
-			last_tile_chiseled = Vector2(-1, 0)
+			last_tile_marked = Vector2(-1, 0)
 			
 	else:
 		puzzle.ChiselMode = ''
