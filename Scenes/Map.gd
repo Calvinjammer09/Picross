@@ -166,22 +166,24 @@ func take_input():
 	elif chisel or mark:
 		var pos = (cursor.position + Vector2(1, 1)) / Vector2(tile_size, tile_size)
 		if chisel:
-			
 			if pos != last_tile_chiseled:
 				last_tile_chiseled = pos
 				puzzle.chisel(puzzle.Tiles[pos[1]][pos[0]], pos[1], pos[0], 'chisel')
-		else:
-			last_tile_chiseled = Vector2(-1, 0)
+		
 			
 		if mark:
 			if pos != last_tile_marked:
 				last_tile_marked = pos
 				puzzle.chisel(puzzle.Tiles[pos[1]][pos[0]], pos[1], pos[0], 'mark')
-		else:
-			last_tile_marked = Vector2(-1, 0)
 			
 	else:
 		puzzle.ChiselMode = ''
+		
+	if not chisel:
+		last_tile_chiseled = Vector2(-1, -1)
+	if not mark:
+		last_tile_marked = Vector2(-1, -1)
+	
 
 	var dir = direction[0] != 0 or direction[1] != 0
 
