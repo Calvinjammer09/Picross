@@ -60,6 +60,9 @@ func check_last_direction(input):
 
 func take_input():
 	var direction = Input.get_vector('left', 'right', 'up', 'down')
+	var got_escape = Input.is_action_pressed('quit')
+	if got_escape:
+		get_tree().quit()
 
 	var _break_check = Input.is_action_pressed('break')
 	var _mark = Input.is_action_pressed('mark')
