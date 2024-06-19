@@ -1,1 +1,1 @@
-# Recreation of Mario's Picross
+# Recreation of Mario's Picross for the SNES

@@ -8,6 +8,8 @@ class Puzzle:
 	var BoardSize : Vector2
 	var BoardState : Array[String]
 	
+	var Tiles : Array
+	
 	var TileSize := 16
 
 	func puzzle_count(s:String) -> Array[int]:
@@ -79,9 +81,9 @@ func generate_map(image, puzzle_size:Vector2):
 	
 	new_puzzle.BoardSize = puzzle_size
 
-	for y in image.get_width():
+	for y in image.get_height():
 		var line = ''
-		for x in image.get_height():
+		for x in image.get_width():
 			line += 'X' if image.get_pixel(x, y)[3] != 0 else ' '
 		new_puzzle.Bitmap.append(line)
 
@@ -89,17 +91,21 @@ func generate_map(image, puzzle_size:Vector2):
 	print("Rows:", new_puzzle.puzzle_rows())
 	print("Cols:", new_puzzle.puzzle_cols())
 	
-	for x in range(new_puzzle.BoardSize[0]):
-		for y in range(new_puzzle.BoardSize[1]):
+	for y in range(new_puzzle.BoardSize[0]):
+		var tile_row : Array
+		for x in range(new_puzzle.BoardSize[1]):
 			var new_brick = Sprite2D.new()
 			new_brick.centered = false
 			new_brick.position = Vector2(x * tile_size, y * tile_size)
 			new_brick.scale = Vector2(tile_scale, tile_scale)
 
 			new_brick.set_texture(blank)
+			
+			tile_row.append(new_brick)
 
 			add_child(new_brick)
-	
+		new_puzzle.Tiles.append(tile_row)
+
 	return new_puzzle
 			
 func chisel(tile:Sprite2D, puzzle:Puzzle):
