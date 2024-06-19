@@ -1,5 +1,9 @@
 extends TileMap
 
+class Puzzle:
+	var Name: String
+	var Bitmap: Array
+	
 
 @onready var first_move_timer = get_node("InitialMoveTimer")
 @onready var fast_move_timer = get_node("MoveTimer")
@@ -16,10 +20,61 @@ var last_movement_y := 0
 
 var current_image_size := Vector2 (20, 20)
 
-func _ready():
-	pass
-	# replace with code for generating tilemap with image
+func puzzle_count(s:String) -> Array[int]:
+	'''Given a string representing a row/col, return the pattern'''
+	var result: Array[int] = []
+
+	for sp in s.split(" "):
+		if 0 != sp.length():
+			result.append(sp.length())
 	
+	return result
+
+func puzzle_rows(p:Puzzle) -> Array:
+	'''Given a puzzle, returns an array of arrays of ints
+	
+	These are the pattern counts for each row
+	'''
+	var result = []
+	for s in p.Bitmap:
+		result.append(puzzle_count(s))
+	return result
+	
+	
+func puzzle_cols(p:Puzzle) -> Array:
+	'''Does the same thing as puzzle_rows, but for columns
+	
+	This is a bit complicated as we have to transpose the puzzle
+	'''
+	var result = []
+	
+	for i in range(p.Bitmap[0].length()):
+		var s = ""
+		for row in p.Bitmap:
+			s += row[i]
+		result.append( puzzle_count(s) )
+	return result
+
+func print_bitmap(p):
+	for s in p.Bitmap:
+		print(s)
+
+func puzzle_demo():
+	var p := Puzzle.new()
+	p.Name = "hard puzzle"
+	p.Bitmap = [
+		" X ", 
+		"XXX",
+		"X X"]
+	
+	print_bitmap(p)
+	print("Rows:", puzzle_rows(p))
+	print("Cols:", puzzle_cols(p))
+
+func _ready():
+	puzzle_demo()
+	# replace with code for generating tilemap with image
+
 func get_map():
 
 	# map is initially an empty array
