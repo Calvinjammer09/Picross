@@ -18,37 +18,59 @@ var current_image_size := Vector2 (20, 20)
 
 func _ready():
 	pass
-	# replace with code for generating tilemap with image
-	
-func get_map():
 
-	# map is initially an empty array
-	var map = []
-	
-	texture.get_data()
-	
-	get_data()
-
-	# get image data
-	var image = test_sprite.texture.get_data()
-	
-	var rows = []
-	var columns = []
-
-	# lock the image so get_pixel() can be called on it
-	image.lock()
-
-	# add non-transparent pixel coordinates to map
-	for x in image.get_width():
-		for y in image.get_height():
-			if image.get_pixel(x,y)[3] != 0:
-				map.append(Vector2(x,y))
-	
-	return map
+#func generate_map():
+#
+	## map is initially an empty array
+	#var map = []
+#
+	## get image data
+	#var image = test_sprite.get_data()
+	#
+	#var row := 1
+	#var column := 1
+	#
+	#var num_blocks_down := 0
+	#var num_blocks_right := 0
+	#
+	#var columns = []
+	#var rows = []
+#
+	## lock the image so get_pixel() can be called on it
+	#image.lock()
+#
+	## add non-transparent pixel coordinates to map
+	#for x in image.get_width():
+		#
+		#for y in image.get_height():
+			#
+			#if image.get_pixel(row - 1, column - 1)[3] != 0:
+				#map.append(Vector2(row, column))
+				#num_blocks_right += 1
+				#
+			#else:
+				#if num_blocks_down != 0:
+					#columns.append(Vector2(num_blocks_down, column)
+					#
+				#if num_blocks_right != 0:
+					#rows.append(Vector2(num_blocks_right, row))
+					#
+				#num_blocks_down = 0
+				#num_blocks_right = 0
+				#
+			#row += 1
+		#
+		#if image.get_pixel(row - 1, column - 1)[3] != 0:
+			#num_blocks_right += 1
+		#
+		#column += 1
+		#
+	#print(map)
+	#
+	#return map
 
 func check_last_direction(input):
 	if input == last_input:
-		last_input = input
 		return false
 		
 	if not input:
@@ -77,7 +99,7 @@ func take_input():
 
 	var input_list = [1 if direction[0] < 0 else 0, 1 if direction[0] > 0 else 0, 1 if direction[1] < 0 else 0, 1 if direction[1] > 0 else 1]
 	
-	var input = check_last_direction(input_list)
+	var _input = check_last_direction(input_list)
 	
 	var dir = direction[0] != 0 or direction[1] != 0
 
