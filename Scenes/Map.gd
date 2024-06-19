@@ -2,7 +2,7 @@ extends TileMap
 
 class Puzzle:
 	var Name: String
-	var Bitmap: Array
+	var Bitmap: Array[String]
 	
 
 @onready var first_move_timer = get_node("InitialMoveTimer")
@@ -20,10 +20,10 @@ var last_movement_y := 0
 
 var current_image_size := Vector2 (20, 20)
 
-<<<<<<< HEAD
 func _ready():
-	pass
-=======
+	puzzle_demo()
+	generate_map(lava_blob.texture.get_image())
+
 func puzzle_count(s:String) -> Array[int]:
 	'''Given a string representing a row/col, return the pattern'''
 	var result: Array[int] = []
@@ -65,7 +65,7 @@ func print_bitmap(p):
 
 func puzzle_demo():
 	var p := Puzzle.new()
-	p.Name = "hard puzzle"
+	p.Name = "easy puzzle"
 	p.Bitmap = [
 		" X ", 
 		"XXX",
@@ -75,63 +75,23 @@ func puzzle_demo():
 	print("Rows:", puzzle_rows(p))
 	print("Cols:", puzzle_cols(p))
 
-func _ready():
-	puzzle_demo()
-	# replace with code for generating tilemap with image
 
-func get_map():
->>>>>>> 34c8ce573ac66a4978fb1343d756dc2dca88dfe6
+func generate_map(image):
+	var bitmap : Array[String]
 
-#func generate_map():
-#
-	## map is initially an empty array
-	#var map = []
-#
-	## get image data
-	#var image = test_sprite.get_data()
-	#
-	#var row := 1
-	#var column := 1
-	#
-	#var num_blocks_down := 0
-	#var num_blocks_right := 0
-	#
-	#var columns = []
-	#var rows = []
-#
-	## lock the image so get_pixel() can be called on it
-	#image.lock()
-#
-	## add non-transparent pixel coordinates to map
-	#for x in image.get_width():
-		#
-		#for y in image.get_height():
-			#
-			#if image.get_pixel(row - 1, column - 1)[3] != 0:
-				#map.append(Vector2(row, column))
-				#num_blocks_right += 1
-				#
-			#else:
-				#if num_blocks_down != 0:
-					#columns.append(Vector2(num_blocks_down, column))
-					#
-				#if num_blocks_right != 0:
-					#rows.append(Vector2(num_blocks_right, row))
-					#
-				#num_blocks_down = 0
-				#num_blocks_right = 0
-				#
-			#row += 1
-		#
-		#if image.get_pixel(row - 1, column - 1)[3] != 0:
-			#num_blocks_right += 1
-		#
-		#column += 1
-		#
-	#print(map)
-	#
-	#return map
+	for y in image.get_width():
+		var line = ''
+		for x in image.get_height():
+			line += 'X' if image.get_pixel(x, y)[3] != 0 else ' '
+		bitmap.append(line)
 
+	var new_puzzle = Puzzle.new()
+	new_puzzle.Name = 'lava'
+	new_puzzle.Bitmap = bitmap
+	
+	for s in new_puzzle.Bitmap:
+		print(s)
+			
 func check_last_direction(input):
 	if input == last_input:
 		return false
