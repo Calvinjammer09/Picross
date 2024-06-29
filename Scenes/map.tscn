@@ -41,11 +41,16 @@ centered = false
 [node name="Viewport" type="Camera2D" parent="."]
 
 [node name="Label" type="Label" parent="."]
-offset_left = -126.0
-offset_top = 227.0
-offset_right = -10.0
-offset_bottom = 250.0
-text = "geometry dash"
+offset_left = -720.0
+offset_top = 27.0
+offset_right = -680.0
+offset_bottom = 206.0
+text = "ge
+om
+et
+ry
+da
+sh"
 
 [connection signal="timeout" from="InitialMoveTimer" to="." method="_on_initial_move_timer_timeout"]
 [connection signal="timeout" from="MoveTimer" to="." method="_on_move_timer_timeout"]

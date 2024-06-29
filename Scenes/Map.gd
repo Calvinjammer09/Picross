@@ -17,7 +17,7 @@ class Puzzle:
 	var blank = load("res://Sprites/BlankTile.png")
 	var marked = load("res://Sprites/Marked.png")
 	
-	func puzzle_count(s:String) -> Array[int]:
+	func puzzle_count(s:String, rows=true) -> Array[int]:
 		'''Given a string representing a row/col, return the pattern'''
 		var result: Array[int] = []
 
@@ -158,7 +158,7 @@ func generate_map(image, puzzle_size:Vector2):
 		
 
 func take_input():
-	direction = Input.get_vector('left', 'right', 'up', 'down')
+	direction = Input.get_vector('left', 'right', 'up', 'down').round()
 	
 	var chisel = Input.is_action_pressed('break')
 	var mark = Input.is_action_pressed('mark')
@@ -208,8 +208,12 @@ func _physics_process(_delta):
 		moving = false
 		can_move = true
 
+	var dir_norm = direction * tile_size
+
 	if can_move and dir:
-		cursor.position += direction.normalized() * tile_size
+		if int(dir_norm[0]) != dir_norm[0]:
+			print(dir_norm)
+		cursor.position += dir_norm
 		can_move = false
 	
 	if puzzle.end_check():
