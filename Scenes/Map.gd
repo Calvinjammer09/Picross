@@ -78,7 +78,7 @@ class Puzzle:
 		elif ChiselMode == 'blank':
 			if tile.texture != blank:
 				tile.set_texture(blank)
-				BoardState[x][y] == ' '
+				BoardState[x][y] = ' '
 				
 		elif ChiselMode == 'mark':
 			if tile.texture != marked:
@@ -86,21 +86,27 @@ class Puzzle:
 				
 		elif tile.texture != chisled:
 			tile.set_texture(chisled)
+			
+	func end_check():
+		return Bitmap == BoardState
 
 @onready var first_move_timer = get_node('InitialMoveTimer')
 @onready var fast_move_timer = get_node('MoveTimer')
 @onready var test_sprite = get_node('Pickaxe')
 @onready var lava_blob = get_node('LavaMap')
 @onready var cursor = get_node('Cursor')
+@onready var camera = get_node('Viewport')
 
 var tile_scale := 2
 var tile_size := 16 * tile_scale
+var board_size := Vector2(20, 20)
 
 var last_tile_chiseled
 var last_tile_marked
 
-var puzzle
+var direction
 
+var puzzle
 var chisled = load("res://Sprites/Chisled.png")
 var blank = load("res://Sprites/BlankTile.png")
 
@@ -111,7 +117,9 @@ var last_movement_x := 0
 var last_movement_y := 0
 
 func _ready():
-	puzzle = generate_map(lava_blob.texture.get_image(), Vector2(20, 20))
+	puzzle = generate_map(lava_blob.texture.get_image(), board_size)
+	
+	camera.position = get_viewport().size - Vector2i(2620, 1380) 
 
 func generate_map(image, puzzle_size:Vector2):
 	var new_puzzle = Puzzle.new()
@@ -131,9 +139,9 @@ func generate_map(image, puzzle_size:Vector2):
 	print("Rows:", new_puzzle.puzzle_rows())
 	print("Cols:", new_puzzle.puzzle_cols())
 	
-	for y in range(new_puzzle.BoardSize[0]):
-		var tile_row : Array
-		for x in range(new_puzzle.BoardSize[1]):
+	for y in range(new_puzzle.BoardSize[1]):
+		var tile_row : Array = []
+		for x in range(new_puzzle.BoardSize[0]):
 			var new_brick = Sprite2D.new()
 			new_brick.centered = false
 			new_brick.position = Vector2(x * tile_size, y * tile_size)
@@ -150,7 +158,7 @@ func generate_map(image, puzzle_size:Vector2):
 		
 
 func take_input():
-	var direction = Input.get_vector('left', 'right', 'up', 'down')
+	direction = Input.get_vector('left', 'right', 'up', 'down')
 	
 	var chisel = Input.is_action_pressed('break')
 	var mark = Input.is_action_pressed('mark')
@@ -169,7 +177,6 @@ func take_input():
 			if pos != last_tile_chiseled:
 				last_tile_chiseled = pos
 				puzzle.chisel(puzzle.Tiles[pos[1]][pos[0]], pos[1], pos[0], 'chisel')
-		
 			
 		if mark:
 			if pos != last_tile_marked:
@@ -183,8 +190,10 @@ func take_input():
 		last_tile_chiseled = Vector2(-1, -1)
 	if not mark:
 		last_tile_marked = Vector2(-1, -1)
-	
 
+func _physics_process(_delta):
+	take_input()
+	
 	var dir = direction[0] != 0 or direction[1] != 0
 
 	if dir:
@@ -202,9 +211,9 @@ func take_input():
 	if can_move and dir:
 		cursor.position += direction.normalized() * tile_size
 		can_move = false
-
-func _physics_process(_delta):
-	take_input()
+	
+	if puzzle.end_check():
+		print('finished!')
 	
 func _on_initial_move_timer_timeout():
 	can_move = true
