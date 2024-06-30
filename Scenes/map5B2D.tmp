@@ -27,10 +27,9 @@ texture = ExtResource("2_pjndv")
 
 [node name="LavaMap" type="Sprite2D" parent="."]
 visible = false
-z_index = 1
-scale = Vector2(32, 32)
+position = Vector2(-891, 165)
+scale = Vector2(20, 20)
 texture = ExtResource("3_ggotv")
-centered = false
 
 [node name="Cursor" type="Sprite2D" parent="."]
 z_index = 1
@@ -42,11 +41,10 @@ centered = false
 [node name="Viewport" type="Camera2D" parent="."]
 
 [node name="Label" type="Label" parent="."]
-visible = false
-offset_left = -1642.0
-offset_top = -20.0
-offset_right = -1602.0
-offset_bottom = 159.0
+offset_left = -720.0
+offset_top = 27.0
+offset_right = -680.0
+offset_bottom = 206.0
 text = "ge
 om
 et

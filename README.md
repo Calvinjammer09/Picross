@@ -1,1 +1,1 @@
-# Recreation of Mario's Picross for the SNES
+# Inspired from Mario's Picross for the SNES

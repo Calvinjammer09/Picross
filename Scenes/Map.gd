@@ -8,6 +8,8 @@ class Puzzle:
 	var BoardSize : Vector2
 	var BoardState : Array[String]
 	
+	var Finished := false
+	
 	var Tiles : Array
 	var ChiselMode : String
 	
@@ -17,7 +19,7 @@ class Puzzle:
 	var blank = load("res://Sprites/BlankTile.png")
 	var marked = load("res://Sprites/Marked.png")
 	
-	func puzzle_count(s:String, rows=true) -> Array[int]:
+	func puzzle_count(s:String) -> Array[int]:
 		'''Given a string representing a row/col, return the pattern'''
 		var result: Array[int] = []
 
@@ -51,7 +53,7 @@ class Puzzle:
 			var s = ""
 			for row in Bitmap:
 				s += row[i]
-			result.append( puzzle_count(s) )
+			result.append(puzzle_count(s))
 		return result
 				
 	func print_bitmap():
@@ -85,10 +87,15 @@ class Puzzle:
 				tile.set_texture(marked)
 				
 		elif tile.texture != chisled:
+			BoardState[x][y] = 'X'
 			tile.set_texture(chisled)
-			
+		
 	func end_check():
-		return Bitmap == BoardState
+		if Finished == false:
+			if Bitmap == BoardState:
+				Finished = true
+				return Bitmap == BoardState
+		return false
 
 @onready var first_move_timer = get_node('InitialMoveTimer')
 @onready var fast_move_timer = get_node('MoveTimer')
@@ -139,6 +146,8 @@ func generate_map(image, puzzle_size:Vector2):
 	print("Rows:", new_puzzle.puzzle_rows())
 	print("Cols:", new_puzzle.puzzle_cols())
 	
+	generate_text(new_puzzle)
+	
 	for y in range(new_puzzle.BoardSize[1]):
 		var tile_row : Array = []
 		for x in range(new_puzzle.BoardSize[0]):
@@ -148,14 +157,61 @@ func generate_map(image, puzzle_size:Vector2):
 			new_brick.scale = Vector2(tile_scale, tile_scale)
 
 			new_brick.set_texture(blank)
-			
+
 			tile_row.append(new_brick)
 
 			add_child(new_brick)
 		new_puzzle.Tiles.append(tile_row)
 
 	return new_puzzle
+	
+func generate_text(new_puzzle):
+	var rows = new_puzzle.puzzle_rows()
+	var columns = new_puzzle.puzzle_cols()
+	
+	var row_num := 0
+	var col_num := 0
+	
+	for row in rows:
+		var text = ''
+		var new_label = Label.new()
 		
+		var i_num = 0
+		for i in row:
+			if i_num >= 1:
+				text += ' '
+			i_num += 1
+			text += str(i)
+
+		new_label.set_text(text)
+
+		new_label.position = Vector2(-16 - 8 - (8 * (text.length() - 1)), (row_num * 32) + 5)
+	
+		row_num += 1
+		
+		add_child(new_label)
+
+	for column in columns:
+		var text = ''
+		var new_label = Label.new()
+		
+		var i_num = 0
+		for i in column:
+			if i_num >= 1:
+				text += ' '
+				
+			i_num += 1
+			text += str(i)
+
+		new_label.set_text(text)
+
+		new_label.position = Vector2((col_num * 32) + 11 - 5 * (text.length() - 1), -32)
+	
+		col_num += 1
+		
+		new_label.set_horizontal_alignment(HORIZONTAL_ALIGNMENT_CENTER)
+		
+		add_child(new_label)
 
 func take_input():
 	direction = Input.get_vector('left', 'right', 'up', 'down').round()
@@ -218,6 +274,7 @@ func _physics_process(_delta):
 	
 	if puzzle.end_check():
 		print('finished!')
+		lava_blob.visible = true
 	
 func _on_initial_move_timer_timeout():
 	can_move = true
